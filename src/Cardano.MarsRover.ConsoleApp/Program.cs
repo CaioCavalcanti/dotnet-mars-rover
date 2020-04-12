@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Cardano.MarsRover.ConsoleApp.Builders;
+using Cardano.MarsRover.ConsoleApp.AppSetup;
+using Cardano.MarsRover.ConsoleApp.MissionControl;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cardano.MarsRover.ConsoleApp
