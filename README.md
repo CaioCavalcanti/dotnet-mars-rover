@@ -33,7 +33,6 @@ MMR
 
 Your task is to develop the software that will parse the command and move the rover(s).
 
-
 ## Running application
 To run this app you need [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) installed.
 
@@ -50,22 +49,44 @@ This command will run the application using a sample command available on the co
 $ dotnet run -- CommandFilePath=commandsFile.txt
 ```
 
-There are some command examples available on directory `example-commands` you can use them with the same command
+There are some command examples available on directory `command-examples` you can use them with the same command
 ```
-$ dotnet run -- CommandFilePath=..\..\examples-commands\one-rover-happy-flow.txt
+$ dotnet run -- CommandFilePath=..\..\command-examples\one-rover-happy-flow.txt
 ```
 
 ## Testing
 ### Unit test
 ```
 $ git clone git@github.com:CaioCavalcanti/dotnet-mars-rover.git
-$ cd dotnet-mars-rover\src\Cardano.MarsRover.ConsoleApp
+$ cd dotnet-mars-rover
 $ dotnet restore
 $ dotnet test
 ```
 
 ### Integration Tests
 `TODO`
+
+## Assumptions
+- The command input is a string
+- A position on plateau is defined by (x, y), where x and y are non-negative integers
+- The lower-left of the plateau is assumed to be position (0, 0)
+- North direction is represented by (x, y+1)
+- The only possible directions are North (N), East (E), South (S) and West (W), as result a rover turns 90 degrees left or right and cannot move diagonally
+- A command cannot have an empty movement sequence
+- When multiple rovers are deployed, the commands are executed sequentially, when the first rover finishes executing a movement sequence, the next rover starts its movement sequence
+- Rovers cannot occupy the same position at the same time
+- When all the commands are finished, a report will show the final position (i.e. "1 2"), followed by the pointing direction ("N") and number of pending movements ("(0)") for each rover, as below:
+    - 1 2 N (0)
+- A rover with pending movements means that it stopped and is awaiting rescue
+    - For example, given command (run `$ dotnet run -- CommandFilePath=..\..\command-examples\one-rover-exceding-plateau.txt`)
+        - 2 2
+        - 1 1 S
+        - MMMLLMMRM
+    - Expect rover output:
+        - [Rover 1] 1 0 S (7)
+- Rescuing a rover is out of scope
+- There is no persistence layer
+- When a command is sent to deploy multiple rovers, they are deployed in sequence, when the first rover finishes executing the movement sequence, the next rover is deployed
 
 ## Improvement opportunities
 - Resolve TODOs
@@ -81,3 +102,5 @@ $ dotnet test
     - How to avoid collision?
 - Improve output
 - Integration tests
+- Limit number of commands, since it's all in memory, it can be exploited
+- Add one more mission example to validate abstraction level and extensibility 
