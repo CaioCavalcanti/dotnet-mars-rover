@@ -1,11 +1,12 @@
 ﻿using Cardano.MarsRover.ConsoleApp.DeviceManagement.Models;
+using Cardano.MarsRover.ConsoleApp.Navigation.Exceptions;
 using Cardano.MarsRover.ConsoleApp.Navigation.Models;
 
 namespace Cardano.MarsRover.ConsoleApp.DeviceManagement.Builders
 {
     public class RoverBuilder
     {
-        private CardinalDirection _direction;
+        private CardinalDirection? _direction;
         private Point _position;
 
         public RoverBuilder LandingOn(Point position)
@@ -22,7 +23,10 @@ namespace Cardano.MarsRover.ConsoleApp.DeviceManagement.Builders
 
         public Rover Build()
         {
-            return new Rover(new Compass(), new NavigationSystem(), _position, _direction);
+            if (_position == null) throw new InvalidPointException(string.Empty);
+            if (!_direction.HasValue) throw new InvalidCardinalDirectionException(string.Empty);
+
+            return new Rover(new Compass(), new NavigationSystem(), _position, _direction.Value);
         }
     }
 }

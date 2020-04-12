@@ -69,10 +69,15 @@ $ dotnet test
 
 ## Improvement opportunities
 - Resolve TODOs
-- Breakdown and better organize project structure
 - Use events and commands async 
+    - Report device position and command status when ExecutedDeviceCommand
+    - Show final result when receive FinishedMovementSequence from all deployed devices
+    - Report error when StoppedMovementSequence
+- Extract some methods to a better abstraction (IMission for example)
 - Validate input command sequence
 - Check if next position is available before moving forward
 - Improve exception handling
 - Let rovers run in parallel
     - How to avoid collision?
+- Improve output
+- Integration tests
