@@ -18,9 +18,6 @@ namespace Cardano.MarsRover.ConsoleApp.Models
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public override string ToString()
-        {
-            return $"{Width} {Height}";
-        }
+        public override string ToString() => $"{Width} {Height}";
     }
 }

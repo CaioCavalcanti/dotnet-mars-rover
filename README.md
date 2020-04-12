@@ -32,3 +32,47 @@ MMR
 ```
 
 Your task is to develop the software that will parse the command and move the rover(s).
+
+
+## Running application
+To run this app you need [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1) installed.
+
+
+```
+$ git clone git@github.com:CaioCavalcanti/dotnet-mars-rover.git
+$ cd dotnet-mars-rover\src\Cardano.MarsRover.ConsoleApp
+$ dotnet restore
+$ dotnet run
+```
+
+This command will run the application using a sample command available on the code. You can also pass commands from a file, using the command
+```
+$ dotnet run -- CommandFilePath=commandsFile.txt
+```
+
+There are some command examples available on directory `example-commands` you can use them with the same command
+```
+$ dotnet run -- CommandFilePath=..\..\examples-commands\one-rover-happy-flow.txt
+```
+
+## Testing
+### Unit test
+```
+$ git clone git@github.com:CaioCavalcanti/dotnet-mars-rover.git
+$ cd dotnet-mars-rover\src\Cardano.MarsRover.ConsoleApp
+$ dotnet restore
+$ dotnet test
+```
+
+### Integration Tests
+`TODO`
+
+## Improvement opportunities
+- Resolve TODOs
+- Breakdown and better organize project structure
+- Use events and commands async 
+- Validate input command sequence
+- Check if next position is available before moving forward
+- Improve exception handling
+- Let rovers run in parallel
+    - How to avoid collision?

@@ -1,9 +1,11 @@
-﻿namespace Cardano.MarsRover.ConsoleApp.Models
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Cardano.MarsRover.ConsoleApp.Models
 {
-    public interface IRover : IRemoteDevice
+    public interface IRover : IDeployableDevice
     {
-        void TurnLeft();
-        void TurnRight();
-        void MoveForward();
+        void SetMovementSequence(Queue<RoverMovement> movementSequence);
+        Task StartMovementSequenceAsync();
     }
 }

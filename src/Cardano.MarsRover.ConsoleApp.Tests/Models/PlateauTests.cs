@@ -11,7 +11,8 @@ namespace Cardano.MarsRover.ConsoleApp.Tests.Models
         {
             var size = new Size(5, 5);
 
-            var plateau = new Plateau(size);
+            var plateau = new Plateau();
+            plateau.SetSize(size);
             int area = plateau.GetArea();
 
             area.Should().Be(size.Width * size.Height);
@@ -29,7 +30,8 @@ namespace Cardano.MarsRover.ConsoleApp.Tests.Models
             var size = new Size(5, 5);
             var pointToCheck = new Point(pointX, pointY);
 
-            var plateau = new Plateau(size);
+            var plateau = new Plateau();
+            plateau.SetSize(size);
 
             bool pointIsValid = plateau.IsPointWithinBoundaries(pointToCheck);
 
@@ -48,7 +50,8 @@ namespace Cardano.MarsRover.ConsoleApp.Tests.Models
             var size = new Size(5, 5);
             var pointToCheck = new Point(pointX, pointY);
 
-            var plateau = new Plateau(size);
+            var plateau = new Plateau();
+            plateau.SetSize(size);
 
             bool pointIsValid = plateau.IsPointWithinBoundaries(pointToCheck);
 

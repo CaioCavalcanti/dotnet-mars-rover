@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cardano.MarsRover.ConsoleApp.Exceptions;
 
 namespace Cardano.MarsRover.ConsoleApp.Models
 {
     public class Rover : IRover
     {
-        private readonly Queue<RoverMovement> _movementSequence = new Queue<RoverMovement>();
         private readonly IReadOnlyDictionary<RoverMovement, Action> _roverMovementActionMappings;
         private readonly ICompass _compass;
         private readonly INavigationSystem _navigationSystem;
@@ -16,13 +16,19 @@ namespace Cardano.MarsRover.ConsoleApp.Models
         public ILandingSurface LandingSurface { get; private set; }
         public Point Position { get; private set; }
         public CardinalDirection PointingDirection { get; private set; }
+        public Queue<RoverMovement> MovementSequence { get; private set; }
 
-        public Rover(int id, ICompass compass, INavigationSystem navigationSystem)
+        public Rover(
+            ICompass compass,
+            INavigationSystem navigationSystem,
+            Point initialPosition,
+            CardinalDirection initialPointingDirection)
         {
             _compass = compass ?? throw new ArgumentNullException(nameof(compass));
             _navigationSystem = navigationSystem ?? throw new ArgumentNullException(nameof(navigationSystem));
 
-            Id = id;
+            Position = initialPosition;
+            PointingDirection = initialPointingDirection;
 
             _roverMovementActionMappings = new Dictionary<RoverMovement, Action>()
             {
@@ -32,29 +38,59 @@ namespace Cardano.MarsRover.ConsoleApp.Models
             };
         }
 
-        public void Deploy(ILandingSurface landingSurface, Point position, CardinalDirection pointingDirection)
+        public void DeployTo(ILandingSurface landingSurface)
         {
             LandingSurface = landingSurface;
-            Position = position;
-            PointingDirection = pointingDirection;
             _isDeployed = true;
         }
 
-        public void TurnLeft()
+        public void SetMovementSequence(Queue<RoverMovement> movementSequence) => MovementSequence = movementSequence;
+
+        public void SetDeviceIdentifier(int id) => Id = id;
+
+        public async Task StartMovementSequenceAsync()
         {
             if (!_isDeployed) throw new RemoteDeviceNotDeployedException(nameof(Rover));
+            await ExecuteMovementSequenceAsync();
+        }
+
+        private async Task ExecuteMovementSequenceAsync()
+        {
+            try
+            {
+                while (MovementSequence.Count > 0)
+                {
+                    RoverMovement nextMovement = MovementSequence.Dequeue();
+                    await ExecuteMovementAsync(nextMovement).ConfigureAwait(false);
+                }
+                // TODO: report success
+            }
+            catch (InvalidOperationException)
+            {
+                // TODO: use domain exception
+                MovementSequence.Clear();
+                // TODO: report error
+            }
+        }
+
+        private async Task ExecuteMovementAsync(RoverMovement movement)
+        {
+            Action movementAction = _roverMovementActionMappings[movement];
+            await Task.Run(movementAction).ConfigureAwait(false);
+        }
+
+        private void TurnLeft()
+        {
             PointingDirection = _compass.GetCardinalDirectionOnLeftSideOf(PointingDirection);
         }
 
-        public void TurnRight()
+        private void TurnRight()
         {
-            if (!_isDeployed) throw new RemoteDeviceNotDeployedException(nameof(Rover));
             PointingDirection = _compass.GetCardinalDirectionOnRightSideOf(PointingDirection);
         }
 
-        public void MoveForward()
+        private void MoveForward()
         {
-            if (!_isDeployed) throw new RemoteDeviceNotDeployedException(nameof(Rover));
             Point nextPoint = _navigationSystem.GetNextPointOnDirection(Position, PointingDirection);
             bool nextPointIsValid = LandingSurface.IsPointWithinBoundaries(nextPoint);
 
@@ -70,5 +106,7 @@ namespace Cardano.MarsRover.ConsoleApp.Models
                 throw new InvalidOperationException($"Cannot move forward, next position {nextPoint} is out of range");
             }
         }
+
+        public override string ToString() => $"Rover {Id}: {Position.X} {Position.Y} {PointingDirection}";
     }
 }

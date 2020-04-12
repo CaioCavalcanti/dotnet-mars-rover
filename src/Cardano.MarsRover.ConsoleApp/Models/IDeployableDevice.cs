@@ -1,12 +1,12 @@
 ﻿namespace Cardano.MarsRover.ConsoleApp.Models
 {
-    public interface IRemoteDevice
+    public interface IDeployableDevice
     {
         int Id { get; }
         ILandingSurface LandingSurface { get; }
         Point Position { get; }
         CardinalDirection PointingDirection { get; }
-
-        void Deploy(ILandingSurface landingSurface, Point position, CardinalDirection pointingDirection);
+        void SetDeviceIdentifier(int id);
+        void DeployTo(ILandingSurface landingSurface);
     }
 }

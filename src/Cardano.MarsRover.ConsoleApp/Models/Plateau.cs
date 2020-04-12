@@ -4,11 +4,6 @@ namespace Cardano.MarsRover.ConsoleApp.Models
 {
     public class Plateau : ILandingSurface
     {
-        public Plateau(Size size)
-        {
-            Size = size ?? throw new ArgumentNullException(nameof(size));
-        }
-
         public Size Size { get; private set; }
 
         public int GetArea()
@@ -22,6 +17,11 @@ namespace Cardano.MarsRover.ConsoleApp.Models
             bool yIsValid = point.Y >= 0 && point.Y <= Size.Height;
             return xIsValid && yIsValid;
 
+        }
+
+        public void SetSize(Size size)
+        {
+            Size = size ?? throw new ArgumentNullException(nameof(size));
         }
     }
 }
