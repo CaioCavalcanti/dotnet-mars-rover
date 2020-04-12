@@ -1,7 +1,5 @@
-# Mars Rover Challenge
-Mars Rover challenge built on .NET Core 3.1 Console App
-
-## Problem Statement
+# 
+# Problem Statement
 Cardano has recently created a new department to build software/middleware for remote devices in space. Cardano has developed a Mars Rover that runs on the .Net platform. This rover must navigate around a plateau of the planet Mars. Cardano headquarters on Earth will send a command to the rover in Mars indicating the dimensions of the plateau and a movement sequence the rover must follow. If more than one rover is deployed, then the Cardano command will contain more than one rover command.
 
 Movement String 
