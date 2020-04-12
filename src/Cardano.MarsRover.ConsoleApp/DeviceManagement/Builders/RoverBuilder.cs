@@ -23,7 +23,7 @@ namespace Cardano.MarsRover.ConsoleApp.DeviceManagement.Builders
 
         public Rover Build()
         {
-            if (_position == null) throw new InvalidPointException(string.Empty);
+            if (_position == null) throw new InvalidPointException(_position);
             if (!_direction.HasValue) throw new InvalidCardinalDirectionException(string.Empty);
 
             return new Rover(new Compass(), new NavigationSystem(), _position, _direction.Value);

@@ -30,7 +30,7 @@ namespace Cardano.MarsRover.ConsoleApp.Navigation.Models
             }
         }
 
-        public static readonly IReadOnlyDictionary<CardinalDirection, CardinalDirection> _cardinalDirectionMappedToLeft =
+        private static readonly IReadOnlyDictionary<CardinalDirection, CardinalDirection> _cardinalDirectionMappedToLeft =
             new Dictionary<CardinalDirection, CardinalDirection>
             {
                 { CardinalDirection.North, CardinalDirection.West },
@@ -39,7 +39,7 @@ namespace Cardano.MarsRover.ConsoleApp.Navigation.Models
                 { CardinalDirection.West, CardinalDirection.South }
             };
 
-        public static readonly IReadOnlyDictionary<CardinalDirection, CardinalDirection> _cardinalDirectionMappedToRight =
+        private static readonly IReadOnlyDictionary<CardinalDirection, CardinalDirection> _cardinalDirectionMappedToRight =
             new Dictionary<CardinalDirection, CardinalDirection>
             {
                 { CardinalDirection.North, CardinalDirection.East },

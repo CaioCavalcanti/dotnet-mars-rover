@@ -69,7 +69,6 @@ namespace Cardano.MarsRover.ConsoleApp.DeviceManagement.Models
             catch (InvalidOperationException)
             {
                 // TODO: use domain exception
-                MovementSequence.Clear();
                 // TODO: report error
             }
         }
@@ -108,6 +107,6 @@ namespace Cardano.MarsRover.ConsoleApp.DeviceManagement.Models
             }
         }
 
-        public override string ToString() => $"Rover {Id}: {Position.X} {Position.Y} {PointingDirection}";
+        public override string ToString() => $"{Position.X} {Position.Y} {PointingDirection.ToString()[0]} ({MovementSequence.Count})";
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cardano.MarsRover.ConsoleApp.DeviceManagement.Models;
+using Cardano.MarsRover.ConsoleApp.MissionControl.Exceptions;
+using Cardano.MarsRover.ConsoleApp.Navigation.Exceptions;
 using Cardano.MarsRover.ConsoleApp.Navigation.Models;
 
 namespace Cardano.MarsRover.ConsoleApp.MissionControl.Models
@@ -39,6 +41,7 @@ namespace Cardano.MarsRover.ConsoleApp.MissionControl.Models
         {
             if (deviceToDeploy == null) throw new ArgumentNullException(nameof(deviceToDeploy));
             if (TargetDestination == null) throw new InvalidOperationException("Cannot deploy device, target destination is not set");
+            if (!TargetDestination.IsPointWithinBoundaries(deviceToDeploy.Position)) throw new InvalidPointException(deviceToDeploy.Position);
 
             if (CanDeployDevice(deviceToDeploy))
             {
@@ -53,7 +56,7 @@ namespace Cardano.MarsRover.ConsoleApp.MissionControl.Models
         {
             if ((DeployedDevices.Count() + 1) == TargetDestination.GetArea())
             {
-                throw new InvalidOperationException("Cannot add more devices to deploy");
+                throw new TooManyDevicesException(DeployedDevices.Count(), TargetDestination.GetArea());
             }
 
             if (DeployedDevices.Any(regiteredDevice => regiteredDevice.Position == deviceToDeploy.Position))
@@ -88,7 +91,7 @@ namespace Cardano.MarsRover.ConsoleApp.MissionControl.Models
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Deployed rovers: {DeployedDevices.Count()}");
-            sb.AppendLine($"Final rover location and status:");
+            sb.AppendLine($"Final rover(s) location and status:");
             DeployedDevices.ForEach(rover => sb.AppendLine($"[Rover {rover.Id}] {rover}"));
             return sb.ToString();
         }
